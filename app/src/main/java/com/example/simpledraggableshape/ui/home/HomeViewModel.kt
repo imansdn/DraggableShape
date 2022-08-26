@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,8 +32,8 @@ class HomeViewModel @Inject constructor(
         getRectangles()
     }
 
-    private fun getRectangles(){
-         getRectanglesUseCase().onEach {
+    private fun getRectangles() {
+        getRectanglesUseCase().onEach {
             _rectangles.value = Response.Success(it)
         }.catch {
             _rectangles.value = Response.Failure(it)
@@ -44,11 +45,26 @@ class HomeViewModel @Inject constructor(
         Log.e(this.javaClass.name, "handleError: $throwable")
     }
 
-    fun updateRectanglePosition(movement: Movement) {
-        (_rectangles.value as? Response.Success)?.data?.let { rectangles ->
-            updateRectanglesUseCase(rectangles, movement).onEach {
+    suspend fun updateRectanglePosition(movement: Movement): Boolean {
+        val rectangles = (_rectangles.value as? Response.Success)?.data
+        return if (rectangles != null) {
+            var result = false
+            updateRectanglesUseCase(rectangles, movement).catch {
+                result = false
+            }.collect {
                 _rectangles.value = Response.Success(it)
-            }.launchIn(viewModelScope)
+                result = true
+            }
+            result
+        } else {
+            false
+        }
+    }
+
+
+    fun moveRectangle(movement: Movement) {
+        viewModelScope.launch {
+            updateRectanglePosition(movement)
         }
     }
 }

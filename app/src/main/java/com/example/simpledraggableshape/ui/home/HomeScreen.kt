@@ -49,7 +49,7 @@ fun HomeScreen(
             is Response.Success -> {
                 (viewModel.rectangles.value as Response.Success<List<Rectangle>>).data?.forEach { rectangle ->
                     DrawRectangle(rect = rectangle, onDrag = { changeX, changeY ->
-                        viewModel.updateRectanglePosition(
+                        viewModel.moveRectangle(
                             Movement(
                                 id = rectangle.id,
                                 x = changeX,

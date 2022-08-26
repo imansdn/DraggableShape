@@ -21,9 +21,7 @@ class UpdateRectanglesUseCase @Inject constructor(private val repository: Rectan
                     yCorner = yCorner + movement.y,
                 )
             }
-            repository.updatePosition(newRect).catch {
-                emit(rectangles)
-            }.collect {
+            repository.updatePosition(newRect).collect {
                 val index = rectangles.indexOfFirst { it.id == movement.id }
                 rectangles.toMutableList().let {
                     it[index] = newRect

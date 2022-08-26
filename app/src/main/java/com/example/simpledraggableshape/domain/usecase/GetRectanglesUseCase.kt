@@ -1,7 +1,6 @@
 package com.example.simpledraggableshape.domain.usecase
 
 import com.example.simpledraggableshape.data.repository.RectanglesRepository
-import com.example.simpledraggableshape.domain.model.Movement
 import com.example.simpledraggableshape.domain.model.Rectangle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

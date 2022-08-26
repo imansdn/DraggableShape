@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SimpleDraggableShape</string>
+    <string name="fetch_failed">fetch data from api failed</string>
+
 </resources>

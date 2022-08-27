@@ -91,10 +91,10 @@ fun DrawRectangle(
             .size(width, height)
             .background(Color(rect.color))
             .border(width = 2.dp, color = MaterialTheme.colors.primaryVariant)
-            .testTag("rectangle ${rect.id}")
+            .testTag("rectangle_${rect.id}")
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
-                    change.consumeAllChanges()
+                    change.consume()
                     val xChange = dragAmount.x.toDp() / screenCfg.screenWidthDp.dp
                     val yChange = dragAmount.y.toDp() / screenCfg.screenHeightDp.dp
                     onDrag(xChange, yChange)

@@ -24,9 +24,10 @@ class RectanglesRepositoryImpl @Inject constructor(
     override fun getRectangles(forceFreshData: Boolean): Flow<List<Rectangle>> {
         return flow {
             val local = appDatabase.rectangleDao().getRectangles()
-            val data = if (local.isNullOrEmpty() || (forceFreshData||isMoreThanWeek())) {
+            val data = if (local.isNullOrEmpty() || forceFreshData || isMoreThanWeek()) {
                 val response = retrofitService.getRectangleRequest().rectangles
                 val entities = response.map { it.toEntity() }
+                appSetting.saveLastVisit()
                 appDatabase.rectangleDao().insertAll(rectangles = entities)
                 entities
             } else {
